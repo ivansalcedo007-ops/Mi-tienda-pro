@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi Catálogo Premium | Gestión de Inventario</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Jost:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/stilos.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="logo">
+          <span class="logo-icon">◈</span>
+          <span class="logo-text"
+            >MiTienda<span class="logo-accent">Pro</span></span
+          >
+        </div>
+        <nav class="nav-links">
+          <a href="#catalogo">Catálogo</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+        <button class="btn-admin-auth" id="btnAdminAuth">🔒 Modo Admin</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Exclusividad & Estilo</p>
+        <h1 class="hero-title">Mercancía<br /><em>Premium</em></h1>
+        <p class="hero-subtitle">
+          Explora nuestro catálogo exclusivo. Gestión dinámica en tiempo real
+          lista para compartir con tus compradores.
+        </p>
+        <button
+          class="btn-primary id-admin-only"
+          id="btnHeroUpload"
+          style="display: none"
+        >
+          ＋ Subir Nueva Mercancía
+        </button>
+      </div>
+    </section>
+
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-number" id="statTotal">0</span>
+        <span class="stat-label">Artículos</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number">100%</span>
+        <span class="stat-label">Garantizado</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number">∞</span>
+        <span class="stat-label">Disponibilidad</span>
+      </div>
+    </div>
+
+    <section class="catalogo-section" id="catalogo">
+      <div class="section-header">
+        <h2 class="section-title">Nuestras Prendas</h2>
+        <div class="filter-bar">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Buscar por nombre o descripción..."
+            class="search-input"
+          />
+          <select id="categoryFilter" class="filter-select">
+            <option value="">Todas las categorías</option>
+          </select>
+          <button
+            class="btn-icon-add id-admin-only"
+            id="btnCatalogAdd"
+            title="Añadir producto"
+            style="display: none"
+          >
+            ＋
+          </button>
+        </div>
+      </div>
+
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">📦</div>
+        <h3>El catálogo está vacío</h3>
+        <p class="id-visitor-only">
+          Actualmente no hay artículos públicos. Si eres el dueño, inicia sesión
+          para subir mercancía.
+        </p>
+        <p class="id-admin-only" style="display: none">
+          Bienvenido, Administrador. Comienza a registrar tus productos premium
+          ahora.
+        </p>
+        <button
+          class="btn-primary id-admin-only"
+          id="btnEmptyAdd"
+          style="display: none"
+        >
+          Subir producto ahora
+        </button>
+      </div>
+
+      <div class="product-grid hidden" id="productGrid"></div>
+    </section>
+
+    <section class="contacto-section" id="contacto">
+      <div class="contacto-inner">
+        <h2>Contacto y Pedidos</h2>
+        <p>
+          ¿Te interesa alguna prenda o artículo? Puedes contactarnos
+          directamente a través de nuestros canales oficiales.
+        </p>
+
+        <div class="contact-cards-container">
+          <div class="contact-info-card">
+            <span class="contact-card-icon">💬</span>
+            <h4 class="contact-card-title">WhatsApp Comercial</h4>
+            <p class="contact-card-sub">
+              Atención inmediata y confirmación de stock.
+            </p>
+            <a
+              href="https://wa.me/573001234567"
+              target="_blank"
+              class="btn-whatsapp-direct"
+              >Escribir al WhatsApp</a
+            >
+          </div>
+          <div class="contact-info-card">
+            <span class="contact-card-icon">📍</span>
+            <h4 class="contact-card-title">Ubicación</h4>
+            <p class="contact-card-sub">
+              Barranquilla, Atlántico,<br />Colombia
+            </p>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="btnShare">
+          📤 Copiar enlace de este Catálogo
+        </button>
+        <p class="share-feedback" id="shareFeedback"></p>
+      </div>
+    </section>
+
+    <footer
+      class="site-footer"
+      style="
+        text-align: center;
+        padding: 30px;
+        border-top: 1px solid var(--border);
+        color: var(--text-muted);
+        font-size: 14px;
+      "
+    >
+      <p>
+        © 2026 Todos los derechos reservados. Gestión de Inventario Premium.
+      </p>
+    </footer>
+
+    <div class="modal-overlay" id="loginOverlay">
+      <div class="modal-box login-box">
+        <button class="modal-close" id="btnCloseLogin">✕</button>
+        <div class="login-header">
+          <div style="font-size: 42px">🔒</div>
+          <h2>Panel Administrativo</h2>
+          <p class="login-subtitle">
+            Ingresa tus credenciales para gestionar el inventario
+          </p>
+        </div>
+        <div class="modal-fields">
+          <div class="field-group">
+            <label for="loginUser">Usuario Administrador</label>
+            <input
+              type="text"
+              id="loginUser"
+              placeholder="Ej: ivan_admin"
+              autocomplete="username"
+            />
+          </div>
+          <div class="field-group">
+            <label for="loginPass">Contraseña Secreta</label>
+            <input
+              type="password"
+              id="loginPass"
+              placeholder="••••••••"
+              autocomplete="current-password"
+            />
+          </div>
+        </div>
+        <div class="modal-actions" style="margin-top: 22px">
+          <button
+            class="btn-primary"
+            id="btnSubmitLogin"
+            style="width: 100%; justify-content: center"
+          >
+            Iniciar Sesión ✓
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-box">
+        <button class="modal-close" id="btnCloseModal">✕</button>
+        <h2 class="modal-title">Subir Producto</h2>
+
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-zone-inner" id="dropZoneInner">
+            <div class="drop-icon">🖼️</div>
+            <p class="drop-text">
+              <img
+                src="img/2.jpeg"
+                alt="Efecto de carga"
+                onerror="
+                  this.style.display = 'none';
+                  textContent = '📁 Seleccionar fotos';
+                "
+              />
+            </p>
+            <p class="drop-sub">Soporta hasta 20 imágenes de alta resolución</p>
+            <input
+              type="file"
+              id="fileInput"
+              accept="image/*"
+              multiple
+              hidden
+            />
+          </div>
+          <div class="preview-grid" id="previewGrid"></div>
+        </div>
+
+        <div class="modal-fields">
+          <div class="field-group">
+            <label for="prodName">Nombre del producto *</label>
+            <input
+              type="text"
+              id="prodName"
+              placeholder="Ej: Zapatillas Deportivas Falcon X"
+            />
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label for="prodPrice">Precio (COP) *</label>
+              <div class="price-input-wrap">
+                <span class="currency">$</span>
+                <input type="number" id="prodPrice" placeholder="0" min="0" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="prodCategory">Categoría *</label>
+              <input
+                type="text"
+                id="prodCategory"
+                placeholder="Ej: Calzado, Ropa, Gorras"
+              />
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="prodDesc">Descripción</label>
+            <textarea
+              id="prodDesc"
+              rows="3"
+              placeholder="Detalla tallas, materiales disponibles o colores..."
+            ></textarea>
+          </div>
+          <div class="field-group">
+            <label for="prodWhatsapp">WhatsApp para este producto</label>
+            <input type="text" id="prodWhatsapp" placeholder="Ej: 3001234567" />
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-ghost-modal" id="btnCancelModal">Cancelar</button>
+          <button class="btn-primary" id="btnSaveProduct">
+            Guardar en Catálogo ✓
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="viewOverlay">
+      <div class="modal-box view-box">
+        <button class="modal-close" id="btnCloseView">✕</button>
+        <div class="view-image-wrap">
+          <img id="viewImage" src="" alt="Producto" />
+          <div class="view-img-nav">
+            <button id="viewPrev">&#8249;</button>
+            <span id="viewImgCount"></span>
+            <button id="viewNext">&#8250;</button>
+          </div>
+        </div>
+        <div class="view-info">
+          <p class="view-category" id="viewCategory"></p>
+          <h2 class="view-name" id="viewName"></h2>
+          <p class="view-price" id="viewPrice"></p>
+          <p class="view-desc" id="viewDesc"></p>
+          <a class="btn-whatsapp" id="viewWhatsapp" href="#" target="_blank"
+            >💬 Pedir por WhatsApp</a
+          >
+          <button
+            class="btn-delete-view"
+            id="btnDeleteProduct"
+            style="display: none"
+          >
+            🗑️ Eliminar artículo permanentemente
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/index.js"></script>
+  </body>
+</html>
